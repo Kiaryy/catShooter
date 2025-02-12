@@ -2,7 +2,7 @@
 CXX = clang++
 CXXFLAGS = -std=c++17 -pedantic-errors -Wall -Weffc++ -Wextra -Wconversion -Wsign-conversion -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
 # Target
-TARGET = ballShooter
+TARGET = catShooter
 # Directories
 BUILD_DIR = build
 OBJ_DIR = $(BUILD_DIR)/obj
