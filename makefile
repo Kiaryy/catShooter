@@ -24,7 +24,7 @@ release: all
 
 # Windows, adds window build flag
 windows: CXX = x86_64-w64-mingw32-g++
-windows: CXXFLAGS = -O3 -static
+windows: CXXFLAGS = -O3 -static -lraylib -lgdi32 -lwinmm -mwindows
 windows: all
 
 
