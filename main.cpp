@@ -11,18 +11,36 @@ int main(void)
     //--------------------------------------------------------------------------------------
     const int screenWidth = 800;
     const int screenHeight = 450;
-    InitWindow(screenWidth, screenHeight, "Ball Shooter");
+    InitWindow(screenWidth, screenHeight, "Cat Shooter");
     
     InitAudioDevice();
     Music title_music = LoadMusicStream("assets/title.mp3");
     Music game_music = LoadMusicStream("assets/place_holder.mp3");
     PlayMusicStream(title_music);
     
+    // Backgrounds
     Image image = LoadImage("assets/title_background.png");     // Loaded in CPU memory (RAM)
     Texture2D title_background = LoadTextureFromImage(image);          // Image converted to texture, GPU memory (VRAM)
-    UnloadImage(image);   // Once image has been converted to texture and uploaded to VRAM, it can be unloaded from RAM
     image = LoadImage("assets/gameplay_background.png");
     Texture2D gameplay_background = LoadTextureFromImage(image);
+
+    // Cats!!
+    image = LoadImage("assets/cat_01.png");
+    Texture cat_01 = LoadTextureFromImage(image);
+    image = LoadImage("assets/cat_02.png");
+    Texture cat_02 = LoadTextureFromImage(image);
+    image = LoadImage("assets/cat_03.png");
+    Texture cat_03 = LoadTextureFromImage(image);
+    image = LoadImage("assets/cat_04.png");
+    Texture cat_04 = LoadTextureFromImage(image);
+    image = LoadImage("assets/cat_05.png");
+    Texture cat_05 = LoadTextureFromImage(image);
+    image = LoadImage("assets/cat_06.png");
+    Texture cat_06 = LoadTextureFromImage(image);
+    image = LoadImage("assets/cat_07.png");
+    Texture cat_07 = LoadTextureFromImage(image);
+    image = LoadImage("assets/cat_08.png");
+    Texture cat_08 = LoadTextureFromImage(image);
     UnloadImage(image);
 
     GameScreen currentScreen = TITLE;
@@ -41,7 +59,7 @@ int main(void)
             switch (currentScreen) {
                 case TITLE:
                     DrawTexture(title_background, 0, 0, WHITE);
-                    DrawText("Ball Shooter", 20, 20, 40, BLACK);
+                    DrawText("Cat Shooter", 20, 20, 40, BLACK);
                     DrawText("PRESS ENTER TO START", 120, 220, 20, BLACK);
                     if (IsKeyPressed(KEY_ENTER)){
                         StopMusicStream(title_music);
@@ -55,8 +73,18 @@ int main(void)
                     UpdateMusicStream(game_music);
                     DrawTexture(gameplay_background, 0, 0, WHITE);
                     // im sure there's a better way to center this but this is what i could find in the cheatsheet
-                    DrawText(TextFormat("Ball position is:\nX:%i Y:%i", GetMouseX(), GetMouseY()), screenWidth/2 - MeasureText(TextFormat("Ball position is:\nX:%i Y:%i", GetMouseX(), GetMouseY()),20)/2, screenHeight/2, 20, BLACK);
-                    DrawCircle(GetMouseX(), GetMouseY(),15, {255,0,0,255});
+                    DrawText(TextFormat("Cursor position is:\nX:%i Y:%i", GetMouseX(), GetMouseY()), screenWidth/2 - MeasureText(TextFormat("Ball position is:\nX:%i Y:%i", GetMouseX(), GetMouseY()),20)/2, screenHeight/2, 20, BLACK);
+                    // DrawCircle(GetMouseX(), GetMouseY(),15, {255,0,0,255});
+                    DrawTextureEx(cat_01, {0, 0}, 0, 0.5, WHITE);
+                    DrawTextureEx(cat_02, {100, 0}, 0, 0.5, WHITE);
+                    DrawTextureEx(cat_03, {200, 0}, 0, 0.5, WHITE);
+                    DrawTextureEx(cat_04, {300, 0}, 0, 0.5, WHITE);
+                    DrawTextureEx(cat_05, {400, 0}, 0, 0.5, WHITE);
+                    DrawTextureEx(cat_06, {500, 0}, 0, 0.5, WHITE);
+                    DrawTextureEx(cat_07, {600, 0}, 0, 0.5, WHITE);
+                    DrawTextureEx(cat_08, {700, 0}, 0, 0.5, WHITE);
+
+
                 break;
                 case ENDING:
                     //TODO Add Game Over screen
