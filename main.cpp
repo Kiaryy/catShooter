@@ -15,6 +15,29 @@ float clamp(float value, float min, float max){
     return value;
 }
 
+void drawCrosshair(Texture crosshair, float& crossHairRotation, int& previousMouseX){
+    // Determine if crosshair is going to the left or to the right
+    if (previousMouseX < GetMouseX()) {
+        crossHairRotation += 2.0f;
+    } else if (previousMouseX > GetMouseX()) {
+        crossHairRotation -= 2.0f;  
+    } else {
+        crossHairRotation = 0.0f;
+    }
+
+    DrawTexturePro(crosshair, {0,0, (float)crosshair.width, (float)crosshair.height},
+    {(float)GetMouseX(), (float)GetMouseY(), (float)crosshair.width/4, (float)crosshair.height/4},
+    {(float)crosshair.width/8, (float)crosshair.height/8},
+    clamp(crossHairRotation, -25, 25),
+    WHITE);
+    // This is a cool one, so the crosshair png is too big so we're only using 25% of its original size
+    // So we divide the og size by 4
+    // But then we need center point of this png to rotate it accurately
+    // So we divide the og size by 8
+
+    previousMouseX = GetMouseX(); // We update the previous position
+}
+
 
 int main(void)
 {
@@ -126,21 +149,9 @@ int main(void)
 
 
 
-                    // Determine if crosshair is going to the left or to the right
-                    if (previousMouseX < GetMouseX()) {
-                        crossHairRotation += 2.0f;
-                    } else if (previousMouseX > GetMouseX()) {
-                        crossHairRotation -= 2.0f;  
-                    } else {
-                        crossHairRotation = 0.0f;
-                    }
 
-                    DrawTexturePro(crosshair, {0,0, (float)crosshair.width, (float)crosshair.height},
-                    {(float)GetMouseX(), (float)GetMouseY(), (float)crosshair.width/4, (float)crosshair.height/4},
-                    {(float)crosshair.width/8, (float)crosshair.height/8},
-                    clamp(crossHairRotation, -25, 25),
-                    WHITE);
-                    previousMouseX = GetMouseX(); // We update the previous position
+                    drawCrosshair(crosshair, crossHairRotation, previousMouseX);
+
                 break;
                 case ENDING:
                     //TODO Add Game Over screen
