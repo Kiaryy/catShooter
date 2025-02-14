@@ -9,3 +9,5 @@ Compile using clang with the provided makefile, or download the binary from the 
 2. Background music 
 3. Code game over
 4. Add cats!
+
+![hippo](https://media.tenor.com/qJRMLPlR3_8AAAAi/maxwell-cat.gif)
