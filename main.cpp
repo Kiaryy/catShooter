@@ -5,7 +5,8 @@
 //------------------------------------------------------------------------------------
 typedef enum GameScreen { TITLE = 0, GAMEPLAY, ENDING } GameScreen;
 
-float clamp(float value, float min, float max){
+template <typename T>
+auto clamp(T value, T min, T max){
     if(value < min){
         return min;
     }
@@ -15,7 +16,7 @@ float clamp(float value, float min, float max){
     return value;
 }
 
-void drawCrosshair(Texture crosshair, float& crossHairRotation, int& previousMouseX){
+void drawCrosshair(Texture& crosshair, float& crossHairRotation, int& previousMouseX){
     // Determine if crosshair is going to the left or to the right
     if (previousMouseX < GetMouseX()) {
         crossHairRotation += 2.0f;
@@ -28,12 +29,14 @@ void drawCrosshair(Texture crosshair, float& crossHairRotation, int& previousMou
     DrawTexturePro(crosshair, {0,0, (float)crosshair.width, (float)crosshair.height},
     {(float)GetMouseX(), (float)GetMouseY(), (float)crosshair.width/4, (float)crosshair.height/4},
     {(float)crosshair.width/8, (float)crosshair.height/8},
-    clamp(crossHairRotation, -25, 25),
+    clamp(crossHairRotation, -25.0f, 25.0f),
     WHITE);
     // This is a cool one, so the crosshair png is too big so we're only using 25% of its original size
     // So we divide the og size by 4
-    // But then we need center point of this png to rotate it accurately
+    // But then we need center point of the new rect to rotate it accurately
     // So we divide the og size by 8
+    // So now you ask: Wouldn't it be easier to just shrink the png?
+    // My response: nuh huh
 
     previousMouseX = GetMouseX(); // We update the previous position
 }
@@ -75,6 +78,7 @@ int main(void)
     Texture cat_07 = LoadTextureFromImage(image);
     image = LoadImage("assets/cat_08.png");
     Texture cat_08 = LoadTextureFromImage(image);
+    // crosshair
     image = LoadImage("assets/crosshair.png");
     Texture crosshair = LoadTextureFromImage(image);
     UnloadImage(image);
