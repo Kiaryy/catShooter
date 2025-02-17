@@ -1,46 +1,10 @@
 #include "raylib.h"
-
+#include "cat.h"
+#include "crosshair.h"
 //------------------------------------------------------------------------------------
 // Program main entry point
 //------------------------------------------------------------------------------------
 typedef enum GameScreen { TITLE = 0, GAMEPLAY, ENDING } GameScreen;
-
-template <typename T>
-auto clamp(T value, T min, T max){
-    if(value < min){
-        return min;
-    }
-    if (value > max){
-        return max;
-    }
-    return value;
-}
-
-void drawCrosshair(Texture& crosshair, float& crossHairRotation, int& previousMouseX){
-    // Determine if crosshair is going to the left or to the right
-    if (previousMouseX < GetMouseX()) {
-        crossHairRotation += 2.0f;
-    } else if (previousMouseX > GetMouseX()) {
-        crossHairRotation -= 2.0f;  
-    } else {
-        crossHairRotation = 0.0f;
-    }
-
-    DrawTexturePro(crosshair, {0,0, (float)crosshair.width, (float)crosshair.height},
-    {(float)GetMouseX(), (float)GetMouseY(), (float)crosshair.width/4, (float)crosshair.height/4},
-    {(float)crosshair.width/8, (float)crosshair.height/8},
-    clamp(crossHairRotation, -25.0f, 25.0f),
-    WHITE);
-    // This is a cool one, so the crosshair png is too big so we're only using 25% of its original size
-    // So we divide the og size by 4
-    // But then we need center point of the new rect to rotate it accurately
-    // So we divide the og size by 8
-    // So now you ask: Wouldn't it be easier to just shrink the png?
-    // My response: nuh huh
-
-    previousMouseX = GetMouseX(); // We update the previous position
-}
-
 
 int main(void)
 {
@@ -55,6 +19,9 @@ int main(void)
     Music game_music = LoadMusicStream("assets/place_holder.mp3");
     PlayMusicStream(title_music);
     
+    // explosion assets
+    Texture2D explosionTexture = LoadTexture("assets/explosion.png");
+    
     // Backgrounds
     Image image = LoadImage("assets/title_background.png");     // Loaded in CPU memory (RAM)
     Texture2D title_background = LoadTextureFromImage(image);          // Image converted to texture, GPU memory (VRAM)
@@ -62,46 +29,23 @@ int main(void)
     Texture2D gameplay_background = LoadTextureFromImage(image);
 
     // Cats!!
-    image = LoadImage("assets/cat_01.png");
-    Texture cat_01 = LoadTextureFromImage(image);
-    image = LoadImage("assets/cat_02.png");
-    Texture cat_02 = LoadTextureFromImage(image);
-    image = LoadImage("assets/cat_03.png");
-    Texture cat_03 = LoadTextureFromImage(image);
-    image = LoadImage("assets/cat_04.png");
-    Texture cat_04 = LoadTextureFromImage(image);
-    image = LoadImage("assets/cat_05.png");
-    Texture cat_05 = LoadTextureFromImage(image);
-    image = LoadImage("assets/cat_06.png");
-    Texture cat_06 = LoadTextureFromImage(image);
-    image = LoadImage("assets/cat_07.png");
-    Texture cat_07 = LoadTextureFromImage(image);
     image = LoadImage("assets/cat_08.png");
     Texture cat_08 = LoadTextureFromImage(image);
+    Cat cat1{100.0f, 100.0f, cat_08, explosionTexture};
+    Cat cat2{200.0f, 100.0f, cat_08, explosionTexture};
     // crosshair
     image = LoadImage("assets/crosshair.png");
-    Texture crosshair = LoadTextureFromImage(image);
+    Texture crosshairTexture = LoadTextureFromImage(image);
+    Crosshair crosshair{crosshairTexture};
     UnloadImage(image);
 
-    // Explosion gif
-    // https://www.raylib.com/examples/textures/loader.html?name=textures_gif_player
-    int animFrames = 0;
-    Image imScarfyAnim = LoadImageAnim("assets/explosion.gif", &animFrames);
-    Texture2D texScarfyAnim = LoadTextureFromImage(imScarfyAnim);
-    
-    unsigned int nextFrameDataOffset = 0;
-    int currentAnimFrame = 0;       
-    int frameDelay = 8;             
-    int frameCounter = 0;  
-
     GameScreen currentScreen = TITLE;
-    float crossHairRotation = 0.0f;
-    int previousMouseX = GetMouseX();
     SetTargetFPS(60);               // Set our game to run at 60 frames-per-second
     //--------------------------------------------------------------------------------------
     
     // Main game loop
     while (!WindowShouldClose()){   // Detect window close button or ESC key    
+        float deltaTime = GetFrameTime();
         BeginDrawing();
         HideCursor();
         // Switch to handle different screens
@@ -121,40 +65,23 @@ int main(void)
                         PlayMusicStream(game_music);
                     }    
                     UpdateMusicStream(game_music);
+
                     DrawTexture(gameplay_background, 0, 0, WHITE);
                     // im sure there's a better way to center this but this is what i could find in the cheatsheet
                     DrawText(TextFormat("Cursor position is:\nX:%i Y:%i", GetMouseX(), GetMouseY()), screenWidth/2 - MeasureText(TextFormat("Ball position is:\nX:%i Y:%i", GetMouseX(), GetMouseY()),20)/2, screenHeight/2, 20, BLACK);
                     
-                    DrawTextureEx(cat_01, {0, 0}, 0, 0.5, WHITE);
-                    DrawTextureEx(cat_02, {100, 0}, 0, 0.5, WHITE);
-                    DrawTextureEx(cat_03, {200, 0}, 0, 0.5, WHITE);
-                    DrawTextureEx(cat_04, {300, 0}, 0, 0.5, WHITE);
-                    DrawTextureEx(cat_05, {400, 0}, 0, 0.5, WHITE);
-                    DrawTextureEx(cat_06, {500, 0}, 0, 0.5, WHITE);
-                    DrawTextureEx(cat_07, {600, 0}, 0, 0.5, WHITE);
-                    DrawTextureEx(cat_08, {700, 0}, 0, 0.5, WHITE);
-
-                    
-                    frameCounter++;
-                    if (frameCounter >= frameDelay){
-                        // Move to next frame
-                        // NOTE: If final frame is reached we return to first frame
-                        currentAnimFrame++;
-                        if (currentAnimFrame >= animFrames) currentAnimFrame = 0;
-                        // Get memory offset position for next frame data in image.data
-                        nextFrameDataOffset = imScarfyAnim.width*imScarfyAnim.height*4*currentAnimFrame;
-                        // Update GPU texture data with next frame image data
-                        // WARNING: Data size (frame size) and pixel format must match already created texture
-                        UpdateTexture(texScarfyAnim, ((unsigned char *)imScarfyAnim.data) + nextFrameDataOffset);
-
-                        frameCounter = 0;
+                    cat1.draw(deltaTime);
+                    if (IsKeyPressed(KEY_ENTER)) {
+                        cat1.isExploding = true;
                     }
-                    DrawTextureEx(texScarfyAnim, {0, 50}, 0, 0.25, WHITE);
+
+                    cat2.draw(deltaTime);
+                    if (IsKeyPressed(KEY_SPACE)) {
+                        cat2.isExploding = true;
+                    }
 
 
-
-
-                    drawCrosshair(crosshair, crossHairRotation, previousMouseX);
+                    crosshair.drawCrosshair();
 
                 break;
                 case ENDING:
