@@ -71,14 +71,9 @@ int main(void)
                     DrawText(TextFormat("Cursor position is:\nX:%i Y:%i", GetMouseX(), GetMouseY()), screenWidth/2 - MeasureText(TextFormat("Ball position is:\nX:%i Y:%i", GetMouseX(), GetMouseY()),20)/2, screenHeight/2, 20, BLACK);
                     
                     cat1.draw(deltaTime);
-                    if (IsKeyPressed(KEY_ENTER)) {
-                        cat1.isExploding = true;
-                    }
-
                     cat2.draw(deltaTime);
-                    if (IsKeyPressed(KEY_SPACE)) {
-                        cat2.isExploding = true;
-                    }
+                    cat1.checkForClick(GetMousePosition());
+                    cat2.checkForClick(GetMousePosition());
 
 
                     crosshair.drawCrosshair();

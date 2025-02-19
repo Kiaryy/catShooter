@@ -11,6 +11,7 @@ class Cat{
 
     Cat(float posX, float posY, Texture catTexture, Texture2D explosionTexture);
     void draw(float deltaTime);
+    void checkForClick(Vector2 crossHairPosition);
 
     private:
         int frameWidth;

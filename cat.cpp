@@ -18,7 +18,7 @@ Cat::Cat(float posX, float posY, Texture catTexture, Texture2D explosionTexture)
 }
 
 void Cat::draw(float deltaTime) {
-    DrawTextureEx(this->catTexture, { this->posX, this->posY }, 0, 0.5, WHITE);
+    DrawTextureEx(this->catTexture, { this->posX, this->posY }, 0, 1, WHITE);
     if (this->isExploding) {
         // Only play the sound effect in the first frame
         if (this->currentFrame == 0 && this->timer == 0) {
@@ -47,4 +47,11 @@ void Cat::draw(float deltaTime) {
     }
 }
 
-
+void Cat::checkForClick(Vector2 crossHairPosition){
+    // Nuclear mess of an if to read but this aint python lil bro get used to shit awful code
+    if (((crossHairPosition.x < (this->posX + this->catTexture.width) && crossHairPosition.x > this->posX) &&
+        (crossHairPosition.y < (this->posY + this->catTexture.height) && crossHairPosition.y > this->posY))
+        && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+            this->isExploding = true;    
+    }
+}
