@@ -31,13 +31,11 @@ void Cat::getRandomCat(){
     }
 }
 
-Cat::Cat(float posX, float posY, Texture2D explosionTexture){
+Cat::Cat(float posX, float posY){
     this->posX = posX;
     this->posY = posY;
     getRandomCat();
-    this->explosionSound = LoadSound("assets/explosion.mp3");
-    SetSoundVolume(explosionSound, 0.25f);
-    this->explosionTexture = explosionTexture;
+    SetSoundVolume(this->explosionSound, 0.10f);
 
     this->frameWidth = this->explosionTexture.width / 16; // Asuming 16 frames
     this->frameHeight = this->explosionTexture.height;
@@ -47,12 +45,12 @@ Cat::Cat(float posX, float posY, Texture2D explosionTexture){
     this->timer = 0; // Timer
 }
 
-void Cat::draw(float deltaTime) {
-
+void Cat::draw(float deltaTime, int& score) {
     DrawTextureEx(this->catTexture, { this->posX, this->posY }, 0, 1, WHITE);
     if (this->isExploding) {
         // Only play the sound effect in the first frame
         if (this->currentFrame == 0 && this->timer == 0) {
+            score += 100;
             PlaySound(this->explosionSound);
         }
     
@@ -74,6 +72,7 @@ void Cat::draw(float deltaTime) {
         if (currentFrame == 15) {
             this->isExploding = false;
             currentFrame = 0;
+            respawn();
             getRandomCat();
         }
     }
@@ -81,9 +80,14 @@ void Cat::draw(float deltaTime) {
 
 void Cat::checkForClick(Vector2 crossHairPosition){
     // Nuclear mess of an if to read but this aint python lil bro get used to shit awful code
-    if (((crossHairPosition.x < (this->posX + this->catTexture.width) && crossHairPosition.x > this->posX) &&
-        (crossHairPosition.y < (this->posY + this->catTexture.height) && crossHairPosition.y > this->posY))
+    if (((crossHairPosition.x <= (this->posX + (float)this->catTexture.width) && crossHairPosition.x >= this->posX) &&
+        (crossHairPosition.y <= (this->posY + (float)this->catTexture.height) && crossHairPosition.y >= this->posY))
         && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
             this->isExploding = true;    
     }
+}
+
+void Cat::respawn(){
+    this->posX = (float)GetRandomValue(10, (int)(790-this->catTexture.width));
+    this->posY = (float)GetRandomValue(10, (int)(440-this->catTexture.height));
 }

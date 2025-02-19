@@ -18,10 +18,7 @@ int main(void)
     Music title_music = LoadMusicStream("assets/title.mp3");
     Music game_music = LoadMusicStream("assets/place_holder.mp3");
     PlayMusicStream(title_music);
-    
-    // explosion assets
-    Texture2D explosionTexture = LoadTexture("assets/explosion.png");
-    
+        
     // Backgrounds
     Image image = LoadImage("assets/title_background.png");     // Loaded in CPU memory (RAM)
     Texture2D title_background = LoadTextureFromImage(image);          // Image converted to texture, GPU memory (VRAM)
@@ -29,13 +26,15 @@ int main(void)
     Texture2D gameplay_background = LoadTextureFromImage(image);
 
     // Cats!!
-    Cat cat1{100.0f, 100.0f, explosionTexture};
-    Cat cat2{200.0f, 100.0f, explosionTexture};
+    Cat cat1{100.0f, 100.0f};
+    Cat cat2{200.0f, 100.0f};
     // crosshair
     image = LoadImage("assets/crosshair.png");
     Texture crosshairTexture = LoadTextureFromImage(image);
     Crosshair crosshair{crosshairTexture};
     UnloadImage(image);
+
+    int score = 0;
 
     GameScreen currentScreen = TITLE;
     SetTargetFPS(60);               // Set our game to run at 60 frames-per-second
@@ -67,9 +66,11 @@ int main(void)
                     DrawTexture(gameplay_background, 0, 0, WHITE);
                     // im sure there's a better way to center this but this is what i could find in the cheatsheet
                     DrawText(TextFormat("Cursor position is:\nX:%i Y:%i", GetMouseX(), GetMouseY()), screenWidth/2 - MeasureText(TextFormat("Ball position is:\nX:%i Y:%i", GetMouseX(), GetMouseY()),20)/2, screenHeight/2, 20, BLACK);
+                    DrawText(TextFormat("Score: %i", score), 680 - MeasureText(TextFormat("Ball position is:\nX:%i Y:%i", GetMouseX(), GetMouseY()),20)/2, 25, 20, BLACK);
                     
-                    cat1.draw(deltaTime);
-                    cat2.draw(deltaTime);
+                    
+                    cat1.draw(deltaTime, score);
+                    cat2.draw(deltaTime, score);
                     cat1.checkForClick(GetMousePosition());
                     cat2.checkForClick(GetMousePosition());
 
