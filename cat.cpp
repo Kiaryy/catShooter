@@ -1,10 +1,40 @@
 #include "cat.h"
 #include <raylib.h>
 
-Cat::Cat(float posX, float posY, Texture catTexture, Texture2D explosionTexture){
+void Cat::getRandomCat(){
+    switch (GetRandomValue(1, 8)) {
+        case 1:
+            this->catTexture = cat_01;
+        break;
+        case 2:
+            this->catTexture = cat_02;
+        break;
+        case 3:
+            this->catTexture = cat_03;
+        break;
+        case 4:
+            this->catTexture = cat_04;
+        break;
+        case 5:
+            this->catTexture = cat_05;
+        break;
+        case 6:
+            this->catTexture = cat_06;
+        break;
+        case 7:
+            this->catTexture = cat_07;
+        break;
+        case 8:
+            this->catTexture = cat_08;
+        break;
+        
+    }
+}
+
+Cat::Cat(float posX, float posY, Texture2D explosionTexture){
     this->posX = posX;
     this->posY = posY;
-    this->catTexture = catTexture;
+    getRandomCat();
     this->explosionSound = LoadSound("assets/explosion.mp3");
     SetSoundVolume(explosionSound, 0.25f);
     this->explosionTexture = explosionTexture;
@@ -18,6 +48,7 @@ Cat::Cat(float posX, float posY, Texture catTexture, Texture2D explosionTexture)
 }
 
 void Cat::draw(float deltaTime) {
+
     DrawTextureEx(this->catTexture, { this->posX, this->posY }, 0, 1, WHITE);
     if (this->isExploding) {
         // Only play the sound effect in the first frame
@@ -43,6 +74,7 @@ void Cat::draw(float deltaTime) {
         if (currentFrame == 15) {
             this->isExploding = false;
             currentFrame = 0;
+            getRandomCat();
         }
     }
 }

@@ -29,10 +29,8 @@ int main(void)
     Texture2D gameplay_background = LoadTextureFromImage(image);
 
     // Cats!!
-    image = LoadImage("assets/cat_08.png");
-    Texture cat_08 = LoadTextureFromImage(image);
-    Cat cat1{100.0f, 100.0f, cat_08, explosionTexture};
-    Cat cat2{200.0f, 100.0f, cat_08, explosionTexture};
+    Cat cat1{100.0f, 100.0f, explosionTexture};
+    Cat cat2{200.0f, 100.0f, explosionTexture};
     // crosshair
     image = LoadImage("assets/crosshair.png");
     Texture crosshairTexture = LoadTextureFromImage(image);
@@ -75,7 +73,7 @@ int main(void)
                     cat1.checkForClick(GetMousePosition());
                     cat2.checkForClick(GetMousePosition());
 
-
+                    
                     crosshair.drawCrosshair();
 
                 break;
