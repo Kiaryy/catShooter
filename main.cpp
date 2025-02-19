@@ -24,15 +24,13 @@ int main(void)
     Texture2D title_background = LoadTextureFromImage(image);          // Image converted to texture, GPU memory (VRAM)
     image = LoadImage("assets/gameplay_background.png");
     Texture2D gameplay_background = LoadTextureFromImage(image);
+    UnloadImage(image);
 
     // Cats!!
     Cat cat1{100.0f, 100.0f};
     Cat cat2{200.0f, 100.0f};
     // crosshair
-    image = LoadImage("assets/crosshair.png");
-    Texture crosshairTexture = LoadTextureFromImage(image);
-    Crosshair crosshair{crosshairTexture};
-    UnloadImage(image);
+    Crosshair crosshair{};
 
     int score = 0;
 

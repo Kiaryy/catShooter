@@ -2,8 +2,7 @@
 #include "utils.h"
 #include <raylib.h>
 
-Crosshair::Crosshair(Texture crosshairTexture){
-    this->crosshairTexture = crosshairTexture;
+Crosshair::Crosshair(){
 }
 
 void Crosshair::drawCrosshair(){

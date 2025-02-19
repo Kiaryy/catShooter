@@ -5,9 +5,9 @@ class Crosshair{
         float posX;
         float posY;
         float crossHairRotation;
-        Texture crosshairTexture;
+        Texture crosshairTexture = LoadTexture("assets/crosshair.png");
         
-        Crosshair(Texture crosshairTexture);
+        Crosshair();
         void drawCrosshair();
         
 };
