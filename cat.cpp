@@ -40,7 +40,7 @@ Cat::Cat(float posX, float posY){
     this->frameWidth = this->explosionTexture.width / 16; // Asuming 16 frames
     this->frameHeight = this->explosionTexture.height;
     this->frameCount = 16;  // Number of frames
-    this->frameSpeed = 0.1f; // Speed (seconds per frame)
+    this->frameSpeed = 0.025f; // Speed (seconds per frame)
     this->currentFrame = 0; // Current frame
     this->timer = 0; // Timer
 }
