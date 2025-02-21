@@ -1,6 +1,20 @@
 #include "cat.h"
 #include <raylib.h>
 
+Cat::Cat(float posX, float posY){
+    this->posX = posX;
+    this->posY = posY;
+    getRandomCat();
+    SetSoundVolume(this->explosionSound, 0.10f);
+    getNewDirection();
+    this->frameWidth = this->explosionTexture.width / 16; // Asuming 16 frames
+    this->frameHeight = this->explosionTexture.height;
+    this->frameCount = 16;  // Number of frames
+    this->frameSpeed = 0.025f; // Speed (seconds per frame)
+    this->currentFrame = 0; // Current frame
+    this->timer = 0; // Timer
+}
+
 void Cat::getRandomCat(){
     switch (GetRandomValue(1, 8)) {
         case 1:
@@ -31,22 +45,27 @@ void Cat::getRandomCat(){
     }
 }
 
-Cat::Cat(float posX, float posY){
-    this->posX = posX;
-    this->posY = posY;
-    getRandomCat();
-    SetSoundVolume(this->explosionSound, 0.10f);
 
-    this->frameWidth = this->explosionTexture.width / 16; // Asuming 16 frames
-    this->frameHeight = this->explosionTexture.height;
-    this->frameCount = 16;  // Number of frames
-    this->frameSpeed = 0.025f; // Speed (seconds per frame)
-    this->currentFrame = 0; // Current frame
-    this->timer = 0; // Timer
-}
-
-void Cat::draw(float deltaTime, int& score) {
+void Cat::draw(float deltaTime, int& score, int& health) {
     DrawTextureEx(this->catTexture, { this->posX, this->posY }, 0, 1, WHITE);
+    
+    // Handle collision with border
+    if (this->posX > 800 || (this->posX + (float)this->catTexture.width < 0)) {
+        health -= 1;
+        respawn();
+        getRandomCat();
+        getNewDirection();
+    }
+
+    if (this->posY > 450 || (this->posY + (float)this->catTexture.height < 0)) {
+        health -= 1;
+        respawn();
+        getRandomCat();
+        getNewDirection();
+    }
+
+
+    // Handle explosion
     if (this->isExploding) {
         // Only play the sound effect in the first frame
         if (this->currentFrame == 0 && this->timer == 0) {
@@ -88,6 +107,19 @@ void Cat::checkForClick(Vector2 crossHairPosition){
 }
 
 void Cat::respawn(){
-    this->posX = (float)GetRandomValue(10, (int)(790-this->catTexture.width));
-    this->posY = (float)GetRandomValue(10, (int)(440-this->catTexture.height));
+    getNewDirection();
+    this->posX = (float)GetRandomValue(50, (int)(700-this->catTexture.width));
+    this->posY = (float)GetRandomValue(50, (int)(350-this->catTexture.height));
+}
+
+void Cat::getNewDirection(){
+    this->movingDiretion.x =(float)GetRandomValue(-2, 2);
+    this->movingDiretion.y =(float)GetRandomValue(-2, 2);
+}
+
+void Cat::move(){
+    if(!this->isExploding){
+        this->posX += this->movingDiretion.x;
+        this->posY += this->movingDiretion.y;
+    }
 }
