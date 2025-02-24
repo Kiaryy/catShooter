@@ -21,7 +21,7 @@ class Cat{
 
 
 
-    Cat(float posX, float posY);
+    Cat();
     void draw(float deltaTime, int& score, int& health);
     void checkForClick(Vector2 crossHairPosition);
     void getRandomCat();

@@ -1,12 +1,11 @@
 #include "cat.h"
 #include <raylib.h>
 
-Cat::Cat(float posX, float posY){
-    this->posX = posX;
-    this->posY = posY;
+Cat::Cat(){
+    
     getRandomCat();
+    respawn();
     SetSoundVolume(this->explosionSound, 0.10f);
-    getNewDirection();
     this->frameWidth = this->explosionTexture.width / 16; // Asuming 16 frames
     this->frameHeight = this->explosionTexture.height;
     this->frameCount = 16;  // Number of frames

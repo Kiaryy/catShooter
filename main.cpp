@@ -1,6 +1,7 @@
 #include "raylib.h"
 #include "cat.h"
 #include "crosshair.h"
+#include <vector>
 //------------------------------------------------------------------------------------
 // Program main entry point
 //------------------------------------------------------------------------------------
@@ -29,13 +30,17 @@ int main(void)
     UnloadImage(image);
 
     // Cats!!
-    Cat cat1{100.0f, 100.0f};
-    Cat cat2{200.0f, 100.0f};
+    std::vector<Cat> cats{};
+    bool resetFlag = true;
+    bool flagSpawnNewCat = true;
     // crosshair
     Crosshair crosshair{};
 
     int score;
+    int hihgScore = 0;
     int health;
+
+
 
     GameScreen currentScreen = TITLE;
     SetTargetFPS(60);               // Set our game to run at 60 frames-per-second
@@ -55,8 +60,16 @@ int main(void)
                     }   
                     UpdateMusicStream(title_music); 
                     // We set (or reset) game data
-                    health = 3;
-                    score = 0;
+                    if (resetFlag){
+                        cats.clear();
+                        cats.push_back({});
+                        cats.push_back({});
+                        
+                        health = 3;
+                        score = 0;
+                        
+                        resetFlag = false;
+                    }
 
                     DrawTexture(title_background, 0, 0, WHITE);
                     DrawText("Cat Shooter", 20, 20, 40, BLACK);
@@ -64,6 +77,7 @@ int main(void)
                     if (IsKeyPressed(KEY_ENTER)){
                         StopMusicStream(title_music);
                         currentScreen = GAMEPLAY;
+                        resetFlag = true;
                     }
                 break;
                 case GAMEPLAY:
@@ -74,17 +88,26 @@ int main(void)
 
                     DrawTexture(gameplay_background, 0, 0, WHITE);
                     // im sure there's a better way to center this but this is what i could find in the cheatsheet
-                    DrawText(TextFormat("Cursor position is:\nX:%i Y:%i", GetMouseX(), GetMouseY()), screenWidth/2 - MeasureText(TextFormat("Ball position is:\nX:%i Y:%i", GetMouseX(), GetMouseY()),20)/2, screenHeight/2, 20, BLACK);
+                    // DrawText(TextFormat("Cursor position is:\nX:%i Y:%i", GetMouseX(), GetMouseY()), screenWidth/2 - MeasureText(TextFormat("Ball position is:\nX:%i Y:%i", GetMouseX(), GetMouseY()),20)/2, screenHeight/2, 20, BLACK);
                     DrawText(TextFormat("Score: %i", score), 700 - MeasureText(TextFormat("Ball position is:\nX:%i Y:%i", GetMouseX(), GetMouseY()),20)/2, 25, 20, BLACK);
                     DrawText(TextFormat("Health: %i", health), 100 - MeasureText(TextFormat("Ball position is:\nX:%i Y:%i", GetMouseX(), GetMouseY()),20)/2, 25, 20, BLACK);
                     
-                    cat1.draw(deltaTime, score, health);
-                    cat1.checkForClick(GetMousePosition());
-                    cat1.move();
-                    cat2.draw(deltaTime, score, health);
-                    cat2.checkForClick(GetMousePosition());
-                    cat2.move();
+
+
+                    for (Cat& cat : cats) {
+                        cat.draw(deltaTime, score, health);
+                        cat.checkForClick(GetMousePosition());
+                        cat.move();
+                    }
                     
+                    if(flagSpawnNewCat && score % 1000 == 0 && score !=0){
+                        flagSpawnNewCat = false;
+                        cats.push_back({});
+                    }
+
+                    if (score % 1000) {
+                        flagSpawnNewCat = true;
+                    }
                     
                     crosshair.drawCrosshair();
 
@@ -95,13 +118,16 @@ int main(void)
                 case ENDING:
                     if (!IsMusicStreamPlaying(gameover_music)) {
                         PlayMusicStream(gameover_music);
-                    }    
+                    }
+                    if (hihgScore < score){
+                        hihgScore = score;
+                    }
                     UpdateMusicStream(gameover_music);
                     DrawTexture(gameover_background, 0, 0, WHITE);
                     DrawText("Game Over!", 300, 150, 40, BLACK);
-                    DrawText("PRESS ENTER TO TRY AGAIN", 250, 220, 20, BLACK);
+                    DrawText(TextFormat("PRESS ENTER TO TRY AGAIN\n\tHigh Score: %i", hihgScore), 250, 220, 20, BLACK);
                     if (IsKeyPressed(KEY_ENTER)){
-                        StopMusicStream(title_music);
+                        StopMusicStream(gameover_music);
                         currentScreen = TITLE;
                     }
                 break;                
