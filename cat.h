@@ -34,6 +34,7 @@ class Cat{
         int frameCount;
         float frameSpeed;
         int currentFrame;
+        float animationTimer;
         float timer;
 
 };

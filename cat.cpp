@@ -11,7 +11,7 @@ Cat::Cat(){
     this->frameCount = 16;  // Number of frames
     this->frameSpeed = 0.025f; // Speed (seconds per frame)
     this->currentFrame = 0; // Current frame
-    this->timer = 0; // Timer
+    this->animationTimer = 0; // Animation Timer
 }
 
 void Cat::getRandomCat(){
@@ -48,6 +48,15 @@ void Cat::getRandomCat(){
 void Cat::draw(float deltaTime, int& score, int& health) {
     DrawTextureEx(this->catTexture, { this->posX, this->posY }, 0, 1, WHITE);
     
+    // Change direction every 2 seconds
+    this->timer += deltaTime;
+    if (this->timer >= 1.0f) {
+        getNewDirection();
+    }
+    
+
+
+
     // Handle collision with border
     if (this->posX > 800 || (this->posX + (float)this->catTexture.width < 0)) {
         health -= 1;
@@ -67,16 +76,16 @@ void Cat::draw(float deltaTime, int& score, int& health) {
     // Handle explosion
     if (this->isExploding) {
         // Only play the sound effect in the first frame
-        if (this->currentFrame == 0 && this->timer == 0) {
+        if (this->currentFrame == 0 && this->animationTimer == 0) {
             score += 100;
             PlaySound(this->explosionSound);
         }
     
-        this->timer += deltaTime;
+        this->animationTimer += deltaTime;
     
         // Update frame based on time
-        if (this->timer >= this->frameSpeed) {
-            this->timer = 0;
+        if (this->animationTimer >= this->frameSpeed) {
+            this->animationTimer = 0;
             this->currentFrame = (this->currentFrame + 1) % this->frameCount;
         }
     
@@ -112,6 +121,7 @@ void Cat::respawn(){
 }
 
 void Cat::getNewDirection(){
+    this->timer = 0;
     this->movingDiretion.x =(float)GetRandomValue(-2, 2);
     this->movingDiretion.y =(float)GetRandomValue(-2, 2);
 }

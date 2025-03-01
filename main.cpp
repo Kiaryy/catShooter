@@ -92,8 +92,6 @@ int main(void)
                     DrawText(TextFormat("Score: %i", score), 700 - MeasureText(TextFormat("Ball position is:\nX:%i Y:%i", GetMouseX(), GetMouseY()),20)/2, 25, 20, BLACK);
                     DrawText(TextFormat("Health: %i", health), 100 - MeasureText(TextFormat("Ball position is:\nX:%i Y:%i", GetMouseX(), GetMouseY()),20)/2, 25, 20, BLACK);
                     
-
-
                     for (Cat& cat : cats) {
                         cat.draw(deltaTime, score, health);
                         cat.checkForClick(GetMousePosition());
