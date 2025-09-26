@@ -2,7 +2,6 @@
 #include <raylib.h>
 
 Cat::Cat(){
-    
     getRandomCat();
     respawn();
     SetSoundVolume(this->explosionSound, 0.10f);
@@ -45,39 +44,56 @@ void Cat::getRandomCat(){
 }
 
 
-void Cat::draw(float deltaTime, int& score, int& health) {
+void Cat::draw(float deltaTime, GameState& gameState) {
     DrawTextureEx(this->catTexture, { this->posX, this->posY }, 0, 1, WHITE);
     
-    // Change direction every 2 seconds
+    // Change direction every second
     this->timer += deltaTime;
     if (this->timer >= 1.0f) {
         getNewDirection();
     }
+
+    if (gameState.shield > 0) {
+        // Handle collision with shield
+        if ((this->posX + (float)this->catTexture.width > 800) || this->posX < 0) {
+            PlaySound(this->shieldBounceSound);
+            gameState.shield -= 1;
+            respawn();
+            getRandomCat();
+            getNewDirection();
+        }
     
-
-
-
-    // Handle collision with border
-    if (this->posX > 800 || (this->posX + (float)this->catTexture.width < 0)) {
-        health -= 1;
-        respawn();
-        getRandomCat();
-        getNewDirection();
+        if ((this->posY + (float)this->catTexture.height > 450) || this->posY < 0) {
+            PlaySound(this->shieldBounceSound);
+            gameState.shield -= 1;
+            respawn();
+            getRandomCat();
+            getNewDirection();
+        } 
+    } else {
+        // Handle collision with border
+        if (this->posX > 800 || (this->posX + (float)this->catTexture.width < 0)) {
+            gameState.health -= 1;
+            respawn();
+            getRandomCat();
+            getNewDirection();
+        }
+    
+        if (this->posY > 450 || (this->posY + (float)this->catTexture.height < 0)) {
+            gameState.health -= 1;
+            respawn();
+            getRandomCat();
+            getNewDirection();
+        }        
     }
-
-    if (this->posY > 450 || (this->posY + (float)this->catTexture.height < 0)) {
-        health -= 1;
-        respawn();
-        getRandomCat();
-        getNewDirection();
-    }
+    
 
 
     // Handle explosion
     if (this->isExploding) {
         // Only play the sound effect in the first frame
         if (this->currentFrame == 0 && this->animationTimer == 0) {
-            score += 100;
+            gameState.score += 100;
             PlaySound(this->explosionSound);
         }
     

@@ -7,7 +7,7 @@ TARGET = catShooter
 BUILD_DIR = build
 OBJ_DIR = $(BUILD_DIR)/obj
 # Source files
-SRCS = main.cpp cat.cpp crosshair.cpp
+SRCS = main.cpp cat.cpp crosshair.cpp powerUp.cpp
 # Objet Files, uses patsbust which replaces text
 OBJS = $(patsubst %.cpp, $(OBJ_DIR)/%.o, $(SRCS))
 

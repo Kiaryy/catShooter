@@ -8,8 +8,6 @@ The objective of the game is to shoot as many cats as you can!
 
 Compile using clang with the provided makefile, or download the binary from the releases page (if i feel like doing that)
 
-  
-
 ### TODO
 
 1. <del>Code basic gameplay
@@ -21,7 +19,5 @@ Compile using clang with the provided makefile, or download the binary from the 
 4. Add cats!
 
 5. Add more effects
-
-  
 
 ![hippo](https://media.tenor.com/gIujj5bPWmMAAAAi/maxwell.gif)
