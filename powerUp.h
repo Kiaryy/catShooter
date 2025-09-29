@@ -20,17 +20,17 @@ class PowerUp{
 
         
         Texture powerUpTexture;
-        Texture shieldTexture = LoadTexture("assets/shield.png");
-        Texture healTexture = LoadTexture("assets/heal.png");
-        Texture lessCatsTexture = LoadTexture("assets/less_cats.png");
-        Texture slowTimeTexture = LoadTexture("assets/slow_time.png");
+        Texture shieldTexture = LoadTexture("assets/power_ups/shield.png");
+        Texture healTexture = LoadTexture("assets/power_ups/heal.png");
+        Texture lessCatsTexture = LoadTexture("assets/power_ups/less_cats.png");
+        Texture slowTimeTexture = LoadTexture("assets/power_ups/slow_time.png");
 
 
-        Sound shieldSound = LoadSound("assets/shield.mp3");
-        Sound healSound = LoadSound("assets/heal.mp3");
-        Sound lessCatsSound = LoadSound("assets/less_cats.mp3");
-        Sound slowTimeSound = LoadSound("assets/slow_time.mp3");
-        Sound normalTimeSound = LoadSound("assets/normal_time.mp3");
+        Sound shieldSound = LoadSound("assets/power_ups/shield.mp3");
+        Sound healSound = LoadSound("assets/power_ups/heal.mp3");
+        Sound lessCatsSound = LoadSound("assets/power_ups/less_cats.mp3");
+        Sound slowTimeSound = LoadSound("assets/power_ups/slow_time.mp3");
+        Sound normalTimeSound = LoadSound("assets/power_ups/normal_time.mp3");
 
         PowerUp();
         void draw(float deltaTime, GameState& gameState, Vector2 crossHairPositions);

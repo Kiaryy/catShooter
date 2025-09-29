@@ -20,16 +20,16 @@ int main(void)
 
     
     InitAudioDevice();
-    Music title_music = LoadMusicStream("assets/title.mp3");
-    Music game_music = LoadMusicStream("assets/place_holder.mp3");
-    Music gameover_music = LoadMusicStream("assets/gameover.mp3");
+    Music title_music = LoadMusicStream("assets/music/title.mp3");
+    Music game_music = LoadMusicStream("assets/music/place_holder.mp3");
+    Music gameover_music = LoadMusicStream("assets/music/gameover.mp3");
     SetMusicVolume(gameover_music, 0.5f);
     // Backgrounds
-    Image image = LoadImage("assets/title_background.png");     // Loaded in CPU memory (RAM)
+    Image image = LoadImage("assets/backgrounds/title_background.png");     // Loaded in CPU memory (RAM)
     Texture2D title_background = LoadTextureFromImage(image);          // Image converted to texture, GPU memory (VRAM)
-    image = LoadImage("assets/gameplay_background.png");
+    image = LoadImage("assets/backgrounds/gameplay_background.png");
     Texture2D gameplay_background = LoadTextureFromImage(image);
-    image = LoadImage("assets/gameover_background.png");
+    image = LoadImage("assets/backgrounds/gameover_background.png");
     Texture2D gameover_background = LoadTextureFromImage(image);
     UnloadImage(image);
 
