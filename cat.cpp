@@ -142,9 +142,9 @@ void Cat::getNewDirection(){
     this->movingDiretion.y =(float)GetRandomValue(-2, 2);
 }
 
-void Cat::move(){
+void Cat::move(GameState& gameState){
     if(!this->isExploding){
-        this->posX += this->movingDiretion.x;
-        this->posY += this->movingDiretion.y;
+        this->posX += this->movingDiretion.x * gameState.catSpeedMult;
+        this->posY += this->movingDiretion.y * gameState.catSpeedMult;
     }
 }

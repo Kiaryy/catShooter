@@ -121,7 +121,7 @@ int main(void)
                     for (Cat& cat : cats) {
                         cat.draw(deltaTime, gameState);
                         cat.checkForClick(GetMousePosition());
-                        cat.move();
+                        cat.move(gameState);
                     }
                     
                     if (gameState.flagDespawnCat) {
@@ -152,13 +152,13 @@ int main(void)
                     if (!IsMusicStreamPlaying(gameover_music)) {
                         PlayMusicStream(gameover_music);
                     }
-                    if (gameState.hihgScore < gameState.score){
-                        gameState.hihgScore = gameState.score;
+                    if (gameState.highScore < gameState.score){
+                        gameState.highScore = gameState.score;
                     }
                     UpdateMusicStream(gameover_music);
                     DrawTexture(gameover_background, 0, 0, WHITE);
                     DrawText("Game Over!", 300, 150, 40, BLACK);
-                    DrawText(TextFormat("PRESS ENTER TO TRY AGAIN\n\tHigh Score: %i", gameState.hihgScore), 250, 220, 20, BLACK);
+                    DrawText(TextFormat("PRESS ENTER TO TRY AGAIN\n\tHigh Score: %i", gameState.highScore), 250, 220, 20, BLACK);
                     if (IsKeyPressed(KEY_ENTER)){
                         StopMusicStream(gameover_music);
                         currentScreen = TITLE;

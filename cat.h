@@ -28,7 +28,7 @@ class Cat{
         void checkForClick(Vector2 crossHairPosition);
         void getRandomCat();
         void respawn();
-        void move();
+        void move(GameState& gameState);
         void getNewDirection();
 
     private:

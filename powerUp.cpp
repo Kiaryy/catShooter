@@ -3,6 +3,7 @@
 
 PowerUp::PowerUp(){
     this->timer = 0;
+    SetSoundVolume(this->lessCatsSound, 0.75f);
 }
 
 void PowerUp::draw(float deltaTime, GameState& gameState, Vector2 crossHairPosition){
@@ -10,17 +11,28 @@ void PowerUp::draw(float deltaTime, GameState& gameState, Vector2 crossHairPosit
         DrawTextureEx(this->powerUpTexture, { this->posX, this->posY }, 0, 1, WHITE);
     }
 
-    // Every 10 seconds, a power up will spawn
     this->timer += deltaTime;
-    if (this->timer >= 5.0f && this->visible == false) {
+    
+    // Every 10 seconds, a power up will spawn
+    if (this->timer >= 5.0f && this->visible == false && this->powerInEffect == false) {
         respawn();
         this->visible = true;
     }
 
+    // Despawn power up if player didnt pick it up in time
     if (this->timer >= 1.0f && this->visible) {
         this->visible = false;
         this->timer = 0;
     }
+
+    // Timer for Slow Time Power Up
+    if (this->timer >= 4.0f && this->powerInEffect) {
+        this->powerInEffect = false;
+        this->timer = 0;
+        gameState.catSpeedMult = 1;
+        PlaySound(this->normalTimeSound);
+    }
+
 
     if (checkForClick(crossHairPosition) && this->visible) {
         switch (this->type) {
@@ -43,6 +55,14 @@ void PowerUp::draw(float deltaTime, GameState& gameState, Vector2 crossHairPosit
                 this->timer = 0;
                 gameState.flagDespawnCat = true;
                 PlaySound(this->lessCatsSound);
+            break;
+
+            case SLOWTIMETYPE:
+                this->visible = false;
+                this->powerInEffect = true;
+                this->timer = 0;
+                gameState.catSpeedMult = 0.25;
+                PlaySound(this->slowTimeSound);
             break;
 
             case ENUMCOUNT:
@@ -70,6 +90,11 @@ void PowerUp::getNewType(){
         case 2:
             this->type = LESSCATSTYPE;
             this->powerUpTexture = lessCatsTexture;
+        break;
+
+        case 3:
+            this->type = SLOWTIMETYPE;
+            this->powerUpTexture = slowTimeTexture;
         break;
     }
     
