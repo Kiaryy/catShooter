@@ -20,4 +20,4 @@ Compile using clang with the provided makefile, or download the binary from the 
 
 5. Add more effects
 
-![hippo](https://media.tenor.com/gIujj5bPWmMAAAAi/maxwell.gif)
+![hippo](catShooterShowCase.gif)
